@@ -26,7 +26,7 @@ public class fly : MonoBehaviour
     };
 
     [Header("Fist Detection")]
-    public float fingerThreshold = 0.05f;
+    public float fingerThreshold = 0.06f;
 
     [Header("Flying")]
     public float flySpeed = 3f;
@@ -52,28 +52,28 @@ public class fly : MonoBehaviour
         if (handSubsystem == null || !leftHand.isTracked || !rightHand.isTracked)
             return;
 
+        bool leftFistRelease = IsFistReleased(leftHand);
+        bool rightFistRelease = IsFistReleased(rightHand);
+
         bool leftFistClench = IsFistClenched(leftHand);
         bool rightFistClench = IsFistClenched(rightHand);
 
-        bool leftFistRelease = IsFistReleased(leftHand);
-        bool rightFistRelease = IsFistReleased(rightHand);
-        
         if (leftFistRelease || rightFistRelease)
         {
             isFlying = false;
-            Debug.Log("Flying stopped!");
+            
         }
         else if (leftFistClench && rightFistClench)
         {
             isFlying = true;
-            Debug.Log("Flying started!");
+            
         }
         
 
         if (isFlying)
         {
             FlyForward();
-            GearShift(rightHand);
+            Velocity();
         }
     }
 
@@ -105,6 +105,7 @@ public class fly : MonoBehaviour
                 return false;
 
             float dist = Vector3.Distance(tipPose.position, rootPose.position);
+            
             if (dist > fingerThreshold)
                 return false;
         }
@@ -122,29 +123,23 @@ public class fly : MonoBehaviour
     }
 
     // This method is called when the player is flying and the gear is shifted
-    void GearShift(XRHand hand)
+    void Velocity()
     {
-        int gear = 0;
+        if (!leftHand.GetJoint(XRHandJointID.Palm).TryGetPose(out Pose leftPose) || !rightHand.GetJoint(XRHandJointID.Palm).TryGetPose(out Pose rightPose))
+        {
+            return; // Hands not tracked properly
+        }
 
-        if (IsFingerRaised(hand, XRHandJointID.IndexTip, XRHandJointID.IndexMetacarpal)) gear++;
-        if (IsFingerRaised(hand, XRHandJointID.MiddleTip, XRHandJointID.MiddleMetacarpal)) gear++;
-        if (IsFingerRaised(hand, XRHandJointID.RingTip, XRHandJointID.RingMetacarpal)) gear++;
+        float handDistance = Vector3.Distance(leftPose.position, rightPose.position);
 
-        if (gear == 1)
-        {
-            flySpeed = 3f; // Slow speed
-            Debug.Log("Gear 1: Slow speed");
-        }
-        else if (gear == 2)
-        {
-            flySpeed = 6f; // Medium speed
-            Debug.Log("Gear 2: Medium speed");
-        }
-        else if (gear == 3)
-        {
-            flySpeed = 9f; // Fast speed
-            Debug.Log("Gear 3: Fast speed");
-        }
+        // Clamp and scale the distance to a reasonable speed range
+        float minDistance = 0.1f;  // Hands very close
+        float maxDistance = 0.5f;  // Arms outstretched
+        float minSpeed = 3f;
+        float maxSpeed = 10f;
+
+        float t = Mathf.InverseLerp(minDistance, maxDistance, handDistance);
+        flySpeed = Mathf.Lerp(minSpeed, maxSpeed, t);
        
     }
 
@@ -159,4 +154,20 @@ public class fly : MonoBehaviour
         float dist = Vector3.Distance(tipPose.position, rootPose.position);
         return dist > fingerThreshold;
     }
+
+    void DebugFingerDistances(XRHand hand)
+    {
+        for (int i = 0; i < tips.Length; i++)
+        {
+            var tip = hand.GetJoint(tips[i]);
+            var root = hand.GetJoint(roots[i]);
+
+            if (tip.TryGetPose(out Pose tipPose) && root.TryGetPose(out Pose rootPose))
+            {
+                float dist = Vector3.Distance(tipPose.position, rootPose.position);
+                Debug.Log($"{hand.handedness} Finger {tips[i]} distance: {dist}");
+            }
+        }
+    }
 }
+
