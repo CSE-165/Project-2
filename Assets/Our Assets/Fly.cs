@@ -58,7 +58,7 @@ public class fly : MonoBehaviour
         bool leftFistClench = IsFistClenched(leftHand);
         bool rightFistClench = IsFistClenched(rightHand);
 
-        if (leftFistRelease || rightFistRelease)
+        if (leftFistRelease && rightFistRelease)
         {
             isFlying = false;
             
@@ -143,17 +143,6 @@ public class fly : MonoBehaviour
        
     }
 
-    bool IsFingerRaised(XRHand hand, XRHandJointID tipId, XRHandJointID rootId)
-    {
-        var tip = hand.GetJoint(tipId);
-        var root = hand.GetJoint(rootId);
-
-        if (!tip.TryGetPose(out Pose tipPose) || !root.TryGetPose(out Pose rootPose))
-            return false;
-
-        float dist = Vector3.Distance(tipPose.position, rootPose.position);
-        return dist > fingerThreshold;
-    }
 
     void DebugFingerDistances(XRHand hand)
     {
