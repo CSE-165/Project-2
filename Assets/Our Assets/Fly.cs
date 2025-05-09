@@ -29,7 +29,7 @@ public class fly : MonoBehaviour
     public float fingerThreshold = 0.06f;
 
     [Header("Flying")]
-    public float flySpeed = 3f;
+    public float flySpeed = 30f;
     private bool isFlying = false;
 
     void Start()
@@ -135,8 +135,8 @@ public class fly : MonoBehaviour
         // Clamp and scale the distance to a reasonable speed range
         float minDistance = 0.1f;  // Hands very close
         float maxDistance = 0.5f;  // Arms outstretched
-        float minSpeed = 3f;
-        float maxSpeed = 10f;
+        float minSpeed = 30f;
+        float maxSpeed = 100f;
 
         float t = Mathf.InverseLerp(minDistance, maxDistance, handDistance);
         flySpeed = Mathf.Lerp(minSpeed, maxSpeed, t);

@@ -4,27 +4,18 @@ using UnityEngine;
 
 public class WayPoint : MonoBehaviour
 {
-    public GameObject waypointPrefab; // Prefab for the waypoint to be instantiated
-    private List<Vector3> positions;
-    // Start is called before the first frame update
-    void Start()
-    {
-        Parser parse = new Parser();
-        positions = parser.ParseFile();
-        AdvanceWayPoint();
-    }
+    public WayPointSpawner waypointSpawner; // Reference to the WayPointSpawner script
+    public Respawn respawn; // Reference to the Respawn script
 
-    void AdvanceWayPoint()
+    void OnCollisionEnter(Collision collision)
     {
-        if (positions.Count > 0)
+        if (collision.gameObject.CompareTag("Player"))
         {
-            Vector3 position = positions[0];
-            positions.RemoveAt(0);
-            SpawnWayPoint(position);
+            respawn.ResetPosition(transform.position); // Reset the player's position to the waypoint's position
+            
+            // Destroy the waypoint after it has been reached
+            Destroy(gameObject);
+            waypointSpawner.AdvanceWayPoint(); // Notify the WayPointSpawner to advance to the next waypoint
         }
-    }
-    void SpawnWayPoint(Vector3 postion)
-    {
-        GameObject waypoint = Instantiate(waypointPrefab, position, Quaternion.identity);
     }
 }

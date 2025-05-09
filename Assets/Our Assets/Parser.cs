@@ -17,7 +17,8 @@ public class Parser : MonoBehaviour
     }
 
     public TextAsset file;
-	List<Vector3> ParseFile()
+	
+	public List<Vector3> ParseFile()
 	{
 		float ScaleFactor = 1.0f / 39.37f;
 		List<Vector3> positions = new List<Vector3>();
@@ -27,7 +28,7 @@ public class Parser : MonoBehaviour
 		{
 			string[] coords = lines[i].Split(' ');
 			Vector3 pos = new Vector3(float.Parse(coords[0]), float.Parse(coords[1]), float.Parse(coords[2]));
-			positions.Add(pos * ScaleFactor);
+			positions.Add(pos);
 		}
 		return positions;
 	}
