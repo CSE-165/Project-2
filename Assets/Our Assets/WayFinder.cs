@@ -16,12 +16,16 @@ public class WayFinder : MonoBehaviour
     {
         currPosition = wayPoint.CurrentWayPoint(); // Get the current waypoint position
 
-        //Spawn arrow infront of rig pointing at the first waypoint
-        Vector3 direction = currPosition - playerRig.position;
-        Quaternion rotation = Quaternion.LookRotation(direction);
-        // position 5 meters infront of player main camera
+        arrow = Instantiate(arrowPrefab, Camera.main.transform.position + new Vector3(0, -3,0)+ Camera.main.transform.forward * 4f , Quaternion.identity); // Instantiate the arrow prefab
 
-        arrow = Instantiate(arrowPrefab, Camera.main.transform.position + Camera.main.transform.forward * 8f , playerRig.rotation);
+        //Spawn arrow infront of rig pointing at the first waypoint
+        Vector3 direction = currPosition - arrow.transform.position;
+        Quaternion rotation = Quaternion.LookRotation(direction, direction);
+
+        arrow.transform.rotation = rotation; // Rotate the arrow to point towards the waypoint
+    
+
+        
     }
 
 
@@ -29,9 +33,9 @@ public class WayFinder : MonoBehaviour
     void Update()
     {
         currPosition = wayPoint.CurrentWayPoint(); // Update the current waypoint position
-        Vector3 direction = currPosition - playerRig.position;
-        Quaternion rotation = Quaternion.LookRotation(direction); // Calculate the rotation to point towards the waypoint
-        arrow.transform.position = Camera.main.transform.position - new Vector3(0, 5,0) + Camera.main.transform.forward * 6f; // Move the arrow to the player's position
+        Vector3 direction = currPosition - arrow.transform.position;
+        Quaternion rotation = Quaternion.LookRotation(direction, direction) * Quaternion.Euler(90,0,0); // Calculate the rotation to point towards the waypoint
+        arrow.transform.position = Camera.main.transform.position + new Vector3(0, -3,0) + Camera.main.transform.forward * 4f; // Move the arrow to the player's position
         arrow.transform.rotation = rotation; // Rotate the arrow to point towards the waypoint
     }
 }

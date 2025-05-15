@@ -9,6 +9,7 @@ public class WayPointSpawner : MonoBehaviour
     private List<Vector3> positions;
     public Parser parser; // Reference to the Parser script
     public Respawn respawn; // Reference to the Respawn script
+    private Vector3 curr; // Current position of the waypoint
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +27,7 @@ public class WayPointSpawner : MonoBehaviour
         if (positions.Count > 0)
         {
             Vector3 position = positions[0];
+            curr = position;
             positions.RemoveAt(0); // Remove the first position from the list
             SpawnWayPoint(position);
         }
@@ -33,7 +35,7 @@ public class WayPointSpawner : MonoBehaviour
 
     public Vector3 CurrentWayPoint()
     {
-        return positions[0]; // Return the current waypoint position
+        return curr; // Return the current waypoint position
     }
     void SpawnWayPoint(Vector3 position)
     {

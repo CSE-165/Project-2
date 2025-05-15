@@ -120,12 +120,16 @@ public class fly : MonoBehaviour
         if (!rightHand.GetJoint(XRHandJointID.Palm).TryGetPose(out Pose rightPose))
             return; // Right hand not tracked properly
 
-        Vector3 forward = rightPose.forward;
+        Vector3 forward = rightPose.forward; // Palm is pointing forward (like Superman)
         //forward.y *= -1; // Invert the vertical (Y) direction
         
 
         //Vector3 flyDirection = -rightPose.up; // Palm is pointing forward (like Superman)
-        playerRig.position += forward * flySpeed * Time.deltaTime;
+        Vector3 targetPosition = playerRig.position + forward * flySpeed * Time.deltaTime;
+        float newX = Mathf.Lerp(playerRig.position.x, targetPosition.x, 0.3f); // Lerp side-to-side
+        float newY = Mathf.Lerp(playerRig.position.y, targetPosition.y, 0.3f); // Direct vertical motion (you can tweak this too)
+        float newZ = targetPosition.z; // Immediate forward
+        playerRig.position =  new Vector3(newX,newY,newZ); // Smoothly move the player rig
     }
 
     // This method is called when the player is flying and the gear is shifted
@@ -140,9 +144,9 @@ public class fly : MonoBehaviour
 
         // Clamp and scale the distance to a reasonable speed range
         float minDistance = 0.1f;  // Hands very close
-        float maxDistance = 0.5f;  // Arms outstretched
+        float maxDistance = 1f;  // Arms outstretched
         float minSpeed = 30f;
-        float maxSpeed = 600f;
+        float maxSpeed = 4000f;
 
         float t = Mathf.InverseLerp(minDistance, maxDistance, handDistance);
         flySpeed = Mathf.Lerp(minSpeed, maxSpeed, t);
