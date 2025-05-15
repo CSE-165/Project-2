@@ -44,6 +44,7 @@ public class fly : MonoBehaviour
         {
             Debug.LogError("XRHandSubsystem not found! Make sure XR Hands is properly set up.");
         }
+        playerRig.rotation *= Quaternion.Euler(0f, 180f, 0f);
     }
 
     // Update is called once per frame
@@ -119,10 +120,12 @@ public class fly : MonoBehaviour
         if (!rightHand.GetJoint(XRHandJointID.Palm).TryGetPose(out Pose rightPose))
             return; // Right hand not tracked properly
 
-
-        Vector3 forward = rightPose.rotation * Vector3.forward;
+        Vector3 forward = rightPose.forward;
+        //forward.y *= -1; // Invert the vertical (Y) direction
         
-        playerRig.position += forward.normalized * flySpeed * Time.deltaTime;
+
+        //Vector3 flyDirection = -rightPose.up; // Palm is pointing forward (like Superman)
+        playerRig.position += forward * flySpeed * Time.deltaTime;
     }
 
     // This method is called when the player is flying and the gear is shifted
@@ -138,8 +141,8 @@ public class fly : MonoBehaviour
         // Clamp and scale the distance to a reasonable speed range
         float minDistance = 0.1f;  // Hands very close
         float maxDistance = 0.5f;  // Arms outstretched
-        float minSpeed = 50f;
-        float maxSpeed = 200f;
+        float minSpeed = 30f;
+        float maxSpeed = 600f;
 
         float t = Mathf.InverseLerp(minDistance, maxDistance, handDistance);
         flySpeed = Mathf.Lerp(minSpeed, maxSpeed, t);

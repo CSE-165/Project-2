@@ -30,8 +30,8 @@ public class WayFinder : MonoBehaviour
     {
         currPosition = wayPoint.CurrentWayPoint(); // Update the current waypoint position
         Vector3 direction = currPosition - playerRig.position;
-        Quaternion rotation = Quaternion.LookRotation(direction);
-        arrow.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 8f; // Move the arrow to the player's position
+        Quaternion rotation = Quaternion.LookRotation(direction); // Calculate the rotation to point towards the waypoint
+        arrow.transform.position = Camera.main.transform.position - new Vector3(0, 5,0) + Camera.main.transform.forward * 6f; // Move the arrow to the player's position
         arrow.transform.rotation = rotation; // Rotate the arrow to point towards the waypoint
     }
 }
