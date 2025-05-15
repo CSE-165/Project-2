@@ -30,6 +30,11 @@ public class WayPointSpawner : MonoBehaviour
             SpawnWayPoint(position);
         }
     }
+
+    public Vector3 CurrentWayPoint()
+    {
+        return positions[0]; // Return the current waypoint position
+    }
     void SpawnWayPoint(Vector3 position)
     {
         GameObject waypoint = Instantiate(waypointPrefab, position, Quaternion.identity);

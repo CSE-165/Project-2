@@ -1050,7 +1050,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86db590e7dc5d144d9666b248098b07d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  arrowPrefab: {fileID: 0}
+  playerRig: {fileID: 715898739}
+  arrowPrefab: {fileID: 1727729855}
+  wayPoint: {fileID: 511199972}
 --- !u!1 &1506076936
 GameObject:
   m_ObjectHideFlags: 0
@@ -1450,6 +1452,11 @@ PrefabInstance:
 --- !u!4 &1727729854 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: dd041fea00491db4695ce83c17bf4b27, type: 3}
+  m_PrefabInstance: {fileID: 1727729853}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1727729855 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: dd041fea00491db4695ce83c17bf4b27, type: 3}
   m_PrefabInstance: {fileID: 1727729853}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1832599611

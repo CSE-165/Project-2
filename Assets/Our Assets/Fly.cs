@@ -116,8 +116,11 @@ public class fly : MonoBehaviour
     void FlyForward()
     {
         if (playerRig == null) return;
+        if (!rightHand.GetJoint(XRHandJointID.Palm).TryGetPose(out Pose rightPose))
+            return; // Right hand not tracked properly
 
-        Vector3 forward = Camera.main.transform.forward;
+
+        Vector3 forward = rightPose.rotation * Vector3.forward;
         
         playerRig.position += forward.normalized * flySpeed * Time.deltaTime;
     }
