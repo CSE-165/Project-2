@@ -13,6 +13,7 @@ public class Timer : MonoBehaviour
     private string display;
     private float roundedValue;
     private bool stop;
+    public TMP_Text goText;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,15 +27,19 @@ public class Timer : MonoBehaviour
     {
         if(!stop)
         {
-            if(countDown <= 0)
+            if (countDown <= 0)
             {
                 timer = timer + Time.deltaTime;
                 roundedValue = (float)Math.Round(timer, 2);
-            } 
-            else 
+                goText.text = "GO!";
+                goText.color = Color.green;
+            }
+            else
             {
                 countDown = countDown - Time.deltaTime;
                 roundedValue = (float)Math.Round(countDown, 2);
+                goText.text = "Wait";
+                goText.color = Color.red;
             }
         }
 
