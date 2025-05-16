@@ -121,15 +121,21 @@ public class fly : MonoBehaviour
             return; // Right hand not tracked properly
 
         Vector3 forward = rightPose.forward; // Palm is pointing forward (like Superman)
-        //forward.y *= -1; // Invert the vertical (Y) direction
-        
+                                             //forward.y *= -1; // Invert the vertical (Y) direction
+
 
         //Vector3 flyDirection = -rightPose.up; // Palm is pointing forward (like Superman)
         Vector3 targetPosition = playerRig.position + forward * flySpeed * Time.deltaTime;
         float newX = Mathf.Lerp(playerRig.position.x, targetPosition.x, 0.3f); // Lerp side-to-side
         float newY = Mathf.Lerp(playerRig.position.y, targetPosition.y, 0.3f); // Direct vertical motion (you can tweak this too)
         float newZ = targetPosition.z; // Immediate forward
-        playerRig.position =  new Vector3(newX,newY,newZ); // Smoothly move the player rig
+        playerRig.position = new Vector3(newX, newY, newZ); // Smoothly move the player rig
+
+        //rotate rig
+        //playerRig.rotation.x = Camera.main.transform.rotation.x;
+        Vector3 angles = playerRig.transform.eulerAngles;
+        angles.y = Camera.main.transform.rotation.x;
+        playerRig.transform.rotation = Quaternion.Euler(angles);
     }
 
     // This method is called when the player is flying and the gear is shifted

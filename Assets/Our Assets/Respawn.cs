@@ -5,15 +5,19 @@ using UnityEngine;
 public class Respawn : MonoBehaviour
 {
 
-    Vector3 resetPosition; 
+    Vector3 resetPosition;
+    public GameObject player;
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.CompareTag("Floor"))
+        if (collision.gameObject.CompareTag("Player"))
         {
+            Debug.Log("CRASH");
             // Reset the player's position to the starting point
-            transform.position = resetPosition;
+            //transform.position = resetPosition;
+            player.transform.position = resetPosition;
         }
+
     }
 
     public void ResetPosition(Vector3 position)
@@ -23,7 +27,8 @@ public class Respawn : MonoBehaviour
 
     public void SpawnPosition(Vector3 position)
     {
-        transform.position = position;
+        //transform.position = position;
+        player.transform.position = position;
     }
 
 }
